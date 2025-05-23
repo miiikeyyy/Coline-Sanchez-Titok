@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>System Breach</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Courier New', monospace;
+      background: black;
+      color: #00ff00;
+      overflow: hidden;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .screen {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      flex-direction: column;
+      z-index: 1;
+    }
+    .screen.active { display: flex; }
+
+    .big-text {
+      font-size: 3em;
+      color: red;
+      text-shadow: 0 0 20px red;
+      animation: flicker 1s infinite;
+    }
+
+    .sub-text {
+      font-size: 1.5em;
+      color: #0f0;
+      margin-top: 20px;
+    }
+
+    @keyframes flicker {
+      0% { opacity: 1; }
+      50% { opacity: 0.3; }
+      100% { opacity: 1; }
+    }
+
+    .glitch {
+      animation: glitch 0.3s infinite;
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-5px, 5px); }
+      40% { transform: translate(5px, -5px); }
+      60% { transform: translate(-5px, -5px); }
+      80% { transform: translate(5px, 5px); }
+      100% { transform: translate(0); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Matrix Canvas Background -->
+<canvas id="matrix"></canvas>
+
+<!-- Screens -->
+<div id="screen1" class="screen active">
+  <div class="big-text">⚠ SYSTEM BREACH ⚠</div>
+  <div class="sub-text glitch">Injecting virus module...</div>
+</div>
+
+<div id="screen2" class="screen">
+  <div class="big-text">VIRUS ACTIVATED</div>
+  <div class="sub-text glitch">Encrypting files...</div>
+</div>
+
+<div id="screen3" class="screen">
+  <div class="big-text">ACCESS DENIED</div>
+  <div class="sub-text glitch">Root system locked</div>
+</div>
+
+<div id="screen4" class="screen">
+  <div class="big-text">💥 SYSTEM FAILURE 💥</div>
+  <div class="sub-text">Rebooting in 3... 2... 1...</div>
+</div>
+
+<div id="screen5" class="screen">
+  <div class="big-text">I WILL FIND YOU</div>
+  <div class="sub-text">I KNOW WHO ARE YOU</div>
+</div>
+
+<!-- Sounds -->
+<audio autoplay id="alarm-sound" loop>
+  <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  // Matrix Code Rain
+  const canvas = document.getElementById("matrix");
+  const ctx = canvas.getContext("2d");
+
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+
+  const letters = "01";
+  const fontSize = 14;
+  const columns = canvas.width / fontSize;
+  const drops = [];
+
+  for (let x = 0; x < columns; x++) drops[x] = 1;
+
+  function draw() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#0F0";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = letters.charAt(Math.floor(Math.random() * letters.length));
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  setInterval(draw, 33);
+
+  // Scene Switcher
+  const screens = [
+    document.getElementById("screen1"),
+    document.getElementById("screen2"),
+    document.getElementById("screen3"),
+    document.getElementById("screen4"),
+    document.getElementById("screen5"),
+  ];
+
+  let index = 0;
+
+  function nextScreen() {
+    if (index < screens.length - 1) {
+      screens[index].classList.remove("active");
+      index++;
+      screens[index].classList.add("active");
+    } else {
+      document.getElementById("alarm-sound").pause();
+    }
+  }
+
+  // Auto change screen every 5 seconds
+  setInterval(nextScreen, 5000);
+</script>
+
+</body>
+</html>
